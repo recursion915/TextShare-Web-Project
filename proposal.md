@@ -1,5 +1,4 @@
-o!/usr/bin/env python
-me: Book Share
+Project Name: Book Share
 
 Description: Several textbook rental companies provide wide range of textbooks rental for 
 students. Although their goal is to save money for students and to keep textbooks recyclable, 
@@ -57,5 +56,3 @@ Features to meet the minimum:
 Users can create their individual accounts. Once the account is established, they can feel free to update their school information, shipping address, books available for renting, and books they wish to rent. Also, users can search for the textbooks they intend to rent. Search results will be presented on a webpage. If a textbook is rented out, users can delete the entry. We also require users to post pictures of the textbooks before renting, which can provide future borrowers with a general idea of the condition of the book. Also, this can be proof for possible damage of textbook. Ajax engine and jQuery library will be applied to create animations in the webpage and meet above functionalities without users reloading the webpage.
 
 To our best of knowledge, no C2C textbook rentals haven’t hit in the market yet. Most of textbooks rental are done by B2C. 
-
-
