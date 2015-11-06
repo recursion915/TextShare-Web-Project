@@ -1,0 +1,82 @@
+<html>
+    
+    
+    <head>
+        
+        <title>Bookshare</title>
+        
+        <script src="jquery-1.11.3.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                              
+                $(document).ajaxError(function() {
+                    alert("Sorry, there was a problem!");
+                });
+            
+                    $("#submitinput").click(function(){
+                       $.ajax({
+                        
+                         url:"users/",
+                         type: "POST",
+                         dataType : "text",
+                              
+                         data : { username: $("#usernameBox").val(),
+                                  password: $("#passwordBox").val(),
+                                  firstname: $("#firstnameBox").val(),
+                                  lastname: $("#lastnameBox").val(),
+                                  address: $("#addressBox").val(),
+                                  university: $("#universityBox").val()
+                              },
+                                            
+                         success: function( data ) {
+                         console.log("You received some data!", data);
+                         if (data == 'OK') {
+                           $("#status").html("Successfully created a new user!");
+                          } else if(data=='ERROR'){
+                           $("#status").html("Error: could not create a new user!");
+                          } else if(data=='EXIST'){
+                           $("#status").html("Username already exists!");
+                          }
+                            
+                          },
+                              
+                       });
+                  });
+              });                 
+                            
+            
+        </script>
+   
+    </head>
+    
+    <body>
+        
+        <h1>Sign Up:</h1>
+            
+            Username:<br>
+            <input id="usernameBox" type="text" name="username">
+                <br>
+                Password:<br>
+                <input id="passwordBox" type="password" name="password">
+                    <br>
+                    Firstname:<br>
+                    <input id="firstnameBox" type="text" name="firstname">
+                        <br>
+                        Lastname:<br>
+                        <input id="lastnameBox" type="text" name="lastname">
+                            <br>
+                            Address:<br>
+                            <input id="addressBox" type="text" name="address">
+                                <br>
+                                University:<br>
+                                <input id="universityBox" type="text" name="university">
+                                    <br>
+            
+            <input id="submitinput"type="submit"/> <input id="resetinput"type="reset"/>
+            
+        </form>
+        <div id="status"></div>
+    </body>
+</html>

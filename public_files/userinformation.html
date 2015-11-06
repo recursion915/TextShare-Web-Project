@@ -1,0 +1,64 @@
+<html>
+   
+   <head>
+        <title>Search Book</title>
+        <script src="jquery-1.11.3.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                              
+                              $(document).ajaxError(function() {
+                                                    alert("Sorry, there was a problem!");
+                                                    });
+                              
+                              
+                              $("#bookWanted").click(function() {
+                                                       $.ajax({
+                                                              // The URL for the request -- note the simple REST API!
+                                                              // all URLs are relative to http://localhost:3000/
+                                                              url: "users2/",//problem with URL  + $("#username").val()+ $("#password").val(),
+                                                              type: "POST",
+                                                              dataType : "json", // this URL returns a plain text string, not JSON
+                                                              data : { username: $("#username").val(),
+                                                                       password: $("#password").val(),
+                                                              },
+
+                                                              success: function( data ) {
+                                                              console.log("You received some data!", data);
+                                                              if (data.username!=null) {
+                                                              $("#status").html("Successfully Logged In!");
+                                                              $("#nameDiv").html("Hi "+data.username);
+                                                              $("#locationDiv").html("You live at "+data.address);
+                                                              $("#schoolDiv").html("You study at "+data.university);
+                                                             
+                                                              }
+                                                              else {
+                                                              $("#status").html("Opps, wrong username or password");
+                                                              
+                                                              }
+                                                              },
+                                                              
+                                                              });
+                                                       });
+                              
+
+                
+                              
+                              });
+                              
+            </script>
+    </head>
+    
+    <body>
+        
+        <h1>Your account information</h1>
+        Search what book you want to rent: <input name="bookwanted" type=text size="30" id="bookWanted"/>
+        <br/>
+        <div id="status"></div>
+        <div id="nameDiv"></div>
+        <div id="locationDiv"></div>
+        <div id="schoolDiv"></div>
+        
+    </body>
+</html>

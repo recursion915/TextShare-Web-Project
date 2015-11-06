@@ -1,0 +1,87 @@
+<html>
+   
+   <head>
+        <title>Sign In Form</title>
+        <script src="jquery-1.11.3.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                              
+                              $(document).ajaxError(function() {
+                                                    alert("Sorry, there was a problem!");
+                                                    });
+                              
+                              
+                              $("#submitButton").click(function() {
+                                                       $.ajax({
+                                                              // The URL for the request -- note the simple REST API!
+                                                              // all URLs are relative to http://localhost:3000/
+                                                              url: "users2/",//problem with URL  + $("#username").val()+ $("#password").val(),
+                                                              type: "POST",
+                                                              dataType : "json", // this URL returns a plain text string, not JSON
+                                                              data : { username: $("#username").val(),
+                                                                       password: $("#password").val(),
+                                                              },
+
+                                                              success: function( data ) {
+                                                              console.log("You received some data!", data);
+                                                              if (data.username!=null)
+                                                              {
+                                                              $("#status").html("Successfully Logged In! You will be redirected soon");
+                                                              $("#nameDiv").html("Hi "+data.username);
+                                                              $("#locationDiv").html("You live at "+data.address);
+                                                              $("#schoolDiv").html("You study at "+data.university);
+<!--                                                              window.setTimeout(function(){window.location="userinformation.html";},3000);-->
+                                                              }
+                                                              else {
+                                                              $("#status").html("Opps, wrong username or password");
+                                                              
+                                                              }
+                                                              },
+                                                              
+                                                              });
+                                                       });
+                              
+<!--                              $("#resetButton").click(function() {-->
+<!--                                                     // From: http://learn.jquery.com/ajax/jquery-ajax-methods/-->
+<!--                                                     // Using the core $.ajax() method-->
+<!--                                                     $.ajax({-->
+<!--                                                            // The URL for the request -- note the simple REST API!-->
+<!--                                                            // all URLs are relative to http://localhost:3000/-->
+<!--                                                            url: "signup.html",-->
+<!--                                                            type: "GET",-->
+<!--                                                            dataType : "text", //-->
+<!--                                                            -->
+<!--                                                            -->
+<!--                                                            });-->
+<!--                                                     });-->
+                
+                              
+                              });
+                              
+            </script>
+    </head>
+    
+    <body>
+        
+        <h1>Please Sign In:</h1>
+        
+        
+        Username: <input name="username" type=text size="30" id="username"/>
+        <br/>
+        
+        Password: <input name="password" type="password" size="30" id="password"/>
+        <br/>
+        
+        <button id="submitButton">Submit </button>
+        <form method="link" action="signup.html">
+            <button id="resetButton">Create New Account</button>
+        </form>
+        <div id="status"></div>
+        <div id="nameDiv"></div>
+        <div id="locationDiv"></div>
+        <div id="schoolDiv"></div>
+        
+    </body>
+</html>
