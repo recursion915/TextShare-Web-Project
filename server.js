@@ -59,12 +59,12 @@ app.post('/users2/',function(req,res){
 //          console.log(nameToLookup);
 //         console.log(passwordToCheck);
         
-    if(!nameToLookup){
-         res.send('ERROR');
-         //send empty json object
-         res.send('{}')
-         return;
-    }
+//    if(!nameToLookup){
+//         res.send('ERROR');
+//         send empty json object
+//         res.send('{}')
+//         return;
+//    }
     
 //         function getQuery(nameToLookup,callback){
          db.query('SELECT * FROM users WHERE username=?', nameToLookup,function(err,rows){
@@ -84,27 +84,7 @@ app.post('/users2/',function(req,res){
                   }
                   }
             });
-//         }
-//         console.log(results[0]);
-//         console.log(results[0].username);
-//         console.log(results[0].password);
-//         var abc=getQuery(nameToLookup,function(err,data){
-//                                    if(err){
-//                                    throw err;}
-//                                    
-//                                    else{
-//                          console.log(data.username);
-//                          console.log(data.password);
-//                          }
-//                          });
-         
-//    if(passwordToCheck==dbPassword){
-//         res.send('OK');
-//         return;
-//    }
-//    
-//    res.send('UNMATCH');
-//    
+
    });
 
 var server = app.listen(3000, function () {

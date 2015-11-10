@@ -7,12 +7,44 @@
         <script type="text/javascript">
             
             $(document).ready(function() {
-                              
+                              //if there is username in local storage
+                              //cookie function
+                              if(localStorage['username']!=null){
                               $(document).ajaxError(function() {
                                                     alert("Sorry, there was a problem!");
                                                     });
-                              
-                              
+                              $.ajax({
+                                     // The URL for the request -- note the simple REST API!
+                                     // all URLs are relative to http://localhost:3000/
+                                     url: "users2/",//problem with URL  + $("#username").val()+ $("#password").val(),
+                                     type: "POST",
+                                     dataType : "json", // this URL returns a plain text string, not JSON
+                                     data : { username: localStorage['username'],
+                                              password: localStorage['password'],
+                                     },
+                                     
+                                     success: function( data ) {
+                                     console.log("You received some data!", data);
+                                     if (data.username!=null)
+                                     {
+<!--                                     $("#status").html("Successfully Logged In! You will be redirected soon");-->
+                                     window.location.replace("userinformation.html");
+
+                                     }
+                                     else {
+                                     $("#status").html("Someone hacked your localstorage");
+                                     
+                                     }
+                                     },
+                                     
+                                     });
+                             
+
+                            }
+                              else{
+                              $(document).ajaxError(function() {
+                                                    alert("Sorry, there was a problem!");
+                                                    });
                               $("#submitButton").click(function() {
                                                        $.ajax({
                                                               // The URL for the request -- note the simple REST API!
@@ -29,10 +61,18 @@
                                                               if (data.username!=null)
                                                               {
                                                               $("#status").html("Successfully Logged In! You will be redirected soon");
-                                                              $("#nameDiv").html("Hi "+data.username);
-                                                              $("#locationDiv").html("You live at "+data.address);
-                                                              $("#schoolDiv").html("You study at "+data.university);
-<!--                                                              window.setTimeout(function(){window.location="userinformation.html";},3000);-->
+                                                              //save the information to the local storage
+                                                              localStorage['username']=data.username;
+                                                              localStorage['password']=data.password;
+                                                              localStorage['firstname']=data.firstname;
+                                                              localStorage['lastname']=data.lastname;
+                                                              localStorage['address']=data.address;
+                                                              localStorage['university']=data.university;
+<!--                                                              //this gonna be a different page-->
+<!--                                                              $("#nameDiv").html("Hi "+data.username);-->
+<!--                                                              $("#locationDiv").html("You live at "+data.address);-->
+<!--                                                              $("#schoolDiv").html("You study at "+data.university);-->
+                                                             window.setTimeout(function(){window.location="userinformation.html";},3000);
                                                               }
                                                               else {
                                                               $("#status").html("Opps, wrong username or password");
@@ -42,6 +82,7 @@
                                                               
                                                               });
                                                        });
+                              }
                               
 <!--                              $("#resetButton").click(function() {-->
 <!--                                                     // From: http://learn.jquery.com/ajax/jquery-ajax-methods/-->
