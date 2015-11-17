@@ -9,6 +9,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+
+
 app.use(express.static('public_files'));
 
 app.post('/users',function(req,res){
