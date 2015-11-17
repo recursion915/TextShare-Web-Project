@@ -14,8 +14,7 @@
                                                     alert("Sorry, there was a problem!");
                                                     });
                               $.ajax({
-                                     // The URL for the request -- note the simple REST API!
-                                     // all URLs are relative to http://localhost:3000/
+                                     
                                      url: "users2/",//problem with URL  + $("#username").val()+ $("#password").val(),
                                      type: "POST",
                                      dataType : "json", // this URL returns a plain text string, not JSON
@@ -27,7 +26,7 @@
                                      console.log("You received some data!", data);
                                      if (data.username!=null)
                                      {
-<!--                                     $("#status").html("Successfully Logged In! You will be redirected soon");-->
+<!--                                 $("#status").html("Successfully Logged In! You will be redirected soon");-->
                                      window.location.replace("userinformation.html");
 
                                      }

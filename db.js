@@ -12,18 +12,18 @@ connection.connect(function(err){
                    else{
                    console.log('database is connecting');
                    }});
-
-connection.query('CREATE TABLE books (' +
-                 ' username VARCHAR(50),' +
-                 ' bookname VARCHAR(50),' +
-                 ' bookcondition VARCHAR(50),' +
-                 ' ISBN VARCHAR(50),' +
-                 ' price DECIMAL(5,2))', function(err, result){
-    if(err) {
-    console.log(err);
-    }else{
-    console.log("Table books Created");
-}});
+//
+//connection.query('CREATE TABLE books (' +
+//                 ' username VARCHAR(50),' +
+//                 ' bookname VARCHAR(50),' +
+//                 ' bookcondition VARCHAR(50),' +
+//                 ' ISBN VARCHAR(50),' +
+//                 ' price DECIMAL(5,2))', function(err, result){
+//    if(err) {
+//    console.log(err);
+//    }else{
+//    console.log("Table books Created");
+//}});
 
 
 module.exports=connection;

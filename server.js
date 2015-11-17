@@ -58,8 +58,8 @@ app.post('/users2/',function(req,res){
          var postBody=req.body;
          var nameToLookup=postBody.username;
          var passwordToCheck=postBody.password;
-//          console.log(nameToLookup);
-//         console.log(passwordToCheck);
+          console.log(nameToLookup);
+         console.log(passwordToCheck);
         
 //    if(!nameToLookup){
 //         res.send('ERROR');
@@ -70,19 +70,30 @@ app.post('/users2/',function(req,res){
     
 //         function getQuery(nameToLookup,callback){
          db.query('SELECT * FROM users WHERE username=?', nameToLookup,function(err,rows){
-                  if(err)throw err;
-                  else{
-                  var jsonObject=rows[0];
-                  console.log(jsonObject);
-                  console.log('password entered is '+passwordToCheck+'orignial password is '+jsonObject.password);
-                  if(passwordToCheck===jsonObject.password)
-                  {
-                  res.send(jsonObject);
+                  if(err){
+                      throw err;
                   }
-                  else
-                  {
-                  //send empty json object if the password is wrong
-                  res.send('{}');
+                  else{
+                        var jsonObject=rows[0];
+                  //check whether the username exists
+                        if(jsonObject==null){
+                  
+                                console.log('wrong password');
+                        }
+                  //username exists
+                        else{
+                  
+                        console.log(jsonObject);
+                        console.log('password entered is '+passwordToCheck+'orignial password is '+jsonObject.password);
+                            if(passwordToCheck===jsonObject.password)
+                            {
+                                res.send(jsonObject);
+                            }
+                            else
+                            {
+                                //send empty json object if the password is wrong
+                            res.send('{}');
+                            }
                   }
                   }
             });
