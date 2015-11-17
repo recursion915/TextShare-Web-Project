@@ -78,7 +78,7 @@ app.post('/users2/',function(req,res){
                   //check whether the username exists
                         if(jsonObject==null){
                   
-                                console.log('wrong password');
+                  res.send('{}');
                         }
                   //username exists
                         else{
@@ -91,7 +91,8 @@ app.post('/users2/',function(req,res){
                             }
                             else
                             {
-                                //send empty json object if the password is wrong
+                            console.log('wrong password');
+                  //send empty json object if the password is wrong
                             res.send('{}');
                             }
                   }
