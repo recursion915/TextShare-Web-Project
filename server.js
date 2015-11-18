@@ -3,6 +3,9 @@ var express = require('express');
 var app = express();
 var db=require('./db');
 var fs = require('fs');
+var multer  = require('multer');
+//var app=express();
+var done=false;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -12,6 +15,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(express.static('public_files'));
+
+app.use(multer({ dest: './uploads/',
+               rename: function (fieldname, filename) {
+               return filename+Date.now();
+               },
+               onFileUploadStart: function (file) {
+               console.log(file.originalname + ' is starting ...')
+               },
+               onFileUploadComplete: function (file) {
+               console.log(file.fieldname + ' uploaded to  ' + file.path)
+               done=true;
+               }
+               }));
+
+
+
+//app.get('/',function(req,res){
+//        res.sendfile("index.html");
+//        });
+
+app.post('/api/photo',function(req,res){
+         if(done==true){
+         console.log(req.files);
+         res.end("File uploaded.");
+         }
+         });
 
 app.post('/users',function(req,res){
     var postBody=req.body;
