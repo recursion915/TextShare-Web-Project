@@ -4,7 +4,7 @@ var app = express();
 var db=require('./db');
 var fs = require('fs');
 var multer  = require('multer');
-//var app=express();
+var app=express();
 var upload = multer({ dest: './uploads/'});
 
 var bodyParser = require('body-parser');
@@ -40,9 +40,9 @@ app.post('/api/photo',function(req,res){
 
 
 
-//app.get('/',function(req,res){
-//        res.sendfile("index.html");
-//        });
+app.get('/',function(req,res){
+        res.sendfile("index.html");
+        });
 
 
 app.post('/users',function(req,res){
@@ -66,7 +66,6 @@ app.post('/users',function(req,res){
     var existUsername=getQuery(myUsername,function(err,data){
                 if(err){
                     throw err;}
-           
                 else{
 //                console.log(data.username);
                 if(!data){
@@ -85,6 +84,50 @@ app.post('/users',function(req,res){
                 }
         });
     });
+
+//get personal book records
+app.get('/bookedit/*',function(req,res){
+        var nameToLookup=req.params[0];
+//        console.log(nameToLookup);
+        var query=db.query('SELECT * FROM books WHERE username=?', nameToLookup,function(err,rows){
+            if(err)throw err;
+            res.send(rows);
+            return;
+            });
+        });
+//post book records
+app.post('/bookcreate',function(req,res){
+         var postBody=req.body;
+         var myUsername=postBody.username;
+         if(!myUsername){
+         res.send('ERROR');
+         return;}
+         
+         var book={username:postBody.username,bookname:postBody.bookname,ISBN:postBody.ISBN,price:postBody.bookprice,bookcondition:postBody.bookcondition};
+         
+         var query=db.query('INSERT INTO books SET ?', book, function(err,res){
+                            if(err){throw err;}
+                            });
+                            res.send('OK');
+         return;});
+//get book search results
+app.get('/booksearch/*',function(req,res){
+        var itemToLookup=req.params[0];
+        if(isNaN(parseInt(itemToLookup))){
+            //title
+        var query=db.query('SELECT * FROM books WHERE bookname=?', itemToLookup,function(err,rows){
+                           if(err)throw err;
+                           res.send(rows);
+                           return;});
+        }else{
+            //ISBN
+        var query=db.query('SELECT * FROM books WHERE ISBN=?', itemToLookup,function(err,rows){
+                            if(err)throw err;
+                            res.send(rows);
+                            return;});
+                           
+        }
+        });
 
 app.post('/users2/',function(req,res){
          var postBody=req.body;
