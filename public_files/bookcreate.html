@@ -1,0 +1,115 @@
+<html>
+    
+    
+    <head>
+        
+        <title>Bookshare</title>
+        
+        <script src="jquery-1.11.3.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                             
+                $("#bookrecord").html("");
+                              
+                $.ajax({
+                       
+                    url:"bookedit/" + localStorage['username'],
+                    type: "GET",
+                    datatype: "json",
+                       
+                    success: function(data){
+                       console.log("You received some data!", data);
+                    
+                       
+                       if(data){
+                       console.log(data);
+                       console.log(data.length);
+          
+                       for(i=0; i<data.length;i++){
+                       $('body').append('<div id="div'+ i +'" />');
+                       $('#div'+ i ).html("");
+                       }
+                       }else{
+                       $("#status").html("Error: could not find book record!");
+                       }
+                       },
+                       });
+                       
+                       
+                   
+                
+                              
+                              
+                              
+                              
+                $(document).ajaxError(function() {
+                    alert("Sorry, there was a problem!");
+                });
+            
+                    $("#submitinput").click(function(){
+                       $.ajax({
+                        
+                         url:"bookcreate/",
+                         type: "POST",
+                         dataType : "text",
+                              
+                         data : { username: localStorage['username'],
+                                  bookname: $("#booknameBox").val(),
+                                  bookcondition: $("#bookconditionBox").val(),
+                                  bookprice: $("#bookpriceBox").val(),
+                                  ISBN: $("#ISBNBox").val(),
+                              },
+                                            
+                         success: function( data ) {
+                         console.log("You received some data!", data);
+                            if (data=='OK') {
+                           $("#status").html("Successfully created a book record!");
+                              window.setTimeout(function () {
+                                                location.href = "userinformation.html";
+                                                },1000);
+                              
+                              }else{
+                           $("#status").html("Error: could not create a book record!");
+                          }
+                            
+                          },
+                              
+                       });
+                  });
+              });                 
+                            
+            
+        </script>
+   
+    </head>
+    
+    <body>
+        
+        <h1>Create Book Records:</h1>
+        
+        
+        
+                Book Name:<br>
+                <input id="booknameBox" type="text" name="bookname">
+                    <br>
+                    Book Condition(Like New, Good, Acceptable):<br>
+                    <input id="bookconditionBox" type="text" name="bookcondition">
+                        <br>
+                        Book Price(USD):<br>
+                        <input id="bookpriceBox" type="text" name="bookprice">
+                            <br>
+                            ISBN:<br>
+                            <input id="ISBNBox" type="text" name="ISBN">
+                                <br>
+                         
+            
+            <input id="submitinput"type="submit"/> <input id="resetinput"type="reset"/>
+            <p></p>
+            <div id="bookrecord"></div>
+
+        </form>
+        <div id="status"></div>
+    </body>
+</html>
