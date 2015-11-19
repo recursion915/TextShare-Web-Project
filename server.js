@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(express.static('public_files'));
+app.use(express.static('uploads'));
 //the files are uploaded at file directory uploads
 app.use(multer({ dest: './uploads/',
                rename: function (fieldname, filename) {

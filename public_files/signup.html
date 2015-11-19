@@ -33,7 +33,10 @@
                          success: function( data ) {
                          console.log("You received some data!", data);
                          if (data == 'OK') {
-                           $("#status").html("Successfully created a new user!");
+                           $("#status").html("Successfully created a new user,you will be redirected to sign in page!");
+                              window.setTimeout(function() {
+                                                window.location.href = 'signin.html';
+                                                }, 3000);
                           } else if(data=='ERROR'){
                            $("#status").html("Error: could not create a new user!");
                           } else if(data=='EXIST'){
