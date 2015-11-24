@@ -25,5 +25,16 @@ connection.connect(function(err){
 //    console.log("Table books Created");
 //}});
 
+connection.query('ALTER table books add column (photo varchar(50))',
+             function(err,result){
+             
+             if(err){
+                console.log("ERROR:"+err.message);
+             }
+             
+             else{
+                console.log("new column added");
+             }
+             });
 
 module.exports=connection;
