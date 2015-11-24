@@ -6,6 +6,7 @@ var fs = require('fs');
 var multer  = require('multer');
 var app=express();
 var upload = multer({ dest: './uploads/'});
+var ImageName;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -15,17 +16,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(express.static('public_files'));
+app.use(express.static('uploads'));
 //the files are uploaded at file directory uploads
 app.use(multer({ dest: './uploads/',
                rename: function (fieldname, filename) {
-               return filename+Date.now();
+               var newname =filename+Date.now();
+           
+
+               return newname;
                },
                onFileUploadStart: function (file) {
-               console.log(file.originalname + ' is starting ...');
+//               console.log(file.originalname + ' is starting ...');
                },
                onFileUploadComplete: function (file) {
-               console.log(file.fieldname + ' uploaded to  ' + file.path)
-               }
+               console.log(file.name+" is uploaded successful");
+               ImageName=file.name;
+                                             }
                }));
 
 //now is able to handle exception
@@ -37,6 +43,23 @@ app.post('/api/photo',function(req,res){
                 res.end("File is uploaded");
                 });
          });
+
+//get book photos
+app.get('/getImages/',function(req,res){
+//        var imageName=req.params[0];
+        console.log("ImageName :"+ImageName);
+        var data;
+        data=ImageName;
+        
+        res.send(data);
+        
+        
+        
+        
+        
+        
+        });
+
 
 
 
@@ -135,14 +158,7 @@ app.post('/users2/',function(req,res){
          var passwordToCheck=postBody.password;
           console.log(nameToLookup);
          console.log(passwordToCheck);
-        
-//    if(!nameToLookup){
-//         res.send('ERROR');
-//         send empty json object
-//         res.send('{}')
-//         return;
-//    }
-    
+
 //         function getQuery(nameToLookup,callback){
          db.query('SELECT * FROM users WHERE username=?', nameToLookup,function(err,rows){
                   if(err){

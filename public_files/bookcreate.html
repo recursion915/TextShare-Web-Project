@@ -12,6 +12,29 @@
             $(document).ready(function() {
                              
                 $("#bookrecord").html("");
+                              $("#previewButton").click(function(){
+                                                      
+                                                      console.log("previewButton clicked");
+                                                      
+                                                      $.ajax({
+                                                             
+                                                             url:"getImages/",
+                                                             type: "GET",
+                                                             datatype: "text",
+                                                             
+                                                             success: function(data){
+                                                             console.log("You graph path is!", data);
+                                                             $("#image").attr('src',data);
+                                                             },
+                                                             
+                                                             });
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      });
+                              
+
                               
                 $.ajax({
                        
@@ -36,10 +59,7 @@
                        }
                        },
                        });
-                       
-                       
-                   
-                
+                              
                               
                               
                               
@@ -47,6 +67,9 @@
                 $(document).ajaxError(function() {
                     alert("Sorry, there was a problem!");
                 });
+                              
+                
+
             
                     $("#submitinput").click(function(){
                        $.ajax({
@@ -103,9 +126,21 @@
                             ISBN:<br>
                             <input id="ISBNBox" type="text" name="ISBN">
                                 <br>
-                         
-            
-            <input id="submitinput"type="submit"/> <input id="resetinput"type="reset"/>
+                                UPLOAD your textbook photos:
+                                <form id        =  "uploadForm"
+                                    enctype   =  "multipart/form-data"
+                                    action    =  "/api/photo"
+                                    method    =  "post"
+                                    >
+                                    <input type="file" name="userPhoto" id="uploadFile" />
+                                    <input type="submit" value="Upload Image" name="submit" id="uploadImage">
+                                        
+                                                                       </form>
+                                <img id="image" alt="Book Preview" src="" style="width:184px;height:228px;">
+
+                     <input type="submit" value="Preview" id="previewButton" />
+            <br>
+            <input id="submitinput"type="submit" value="Submit"/> <input id="resetinput"type="reset"/>
             <p></p>
             <div id="bookrecord"></div>
 
