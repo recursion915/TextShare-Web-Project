@@ -1,7 +1,7 @@
 <html>
    
    <head>
-        <title>Search Book</title>
+        <title>Book Details</title>
         <script src="jquery-1.11.3.min.js"></script>
         
         <script type="text/javascript">
@@ -88,28 +88,19 @@
     </head>
     
     <body>
+      
+        <h1>Book Details</h1>
+        <p><img id="image" alt="Book Preview" src="" style="width:184px;height:228px;"> </P>
+     
+        Title: <div id="booltitle"></div>
+        ISNB: <div id="isbn"></div>
+        Book Condition: <div id="bookcondition"></div>
+        Price: <div id="price"></div>
+        Sell by: <div id="seller"></div>
+        Location: <div id="location"></div>
+       
         <p>
-        <button id="Button_logout">Log out</button>
-        <button id="Button_bookcreate">Create Book Record</button>
-        </p>
-        <h1>Account information</h1>
-        <div id="firstname"></div>
-        <div id="username"></div>
-        <div id="password"></div>
-        <div id="locationDiv"></div>
-        <div id="schoolDiv"></div>
-        <p></p>
-        <h1>Book Records</h1>
-        <div id="bookrecord"></div>
-        <h1>Search</h1>
-        <br>Search what book you want to rent(Title, ISBN): <input name="bookwanted" type=text size="30" id="bookWanted"/>
-        <button id="search">Search</button>
-        </br>
-        <p></p>
-        <p></p>
-        <div id="searchResult"></div>
-<!--        booktitle:<div id="booktitle"></div> <div id="isbn"></div> <div id="booktitle"></div>-->
-
-        
-    </body>
+        <button id="Button_checkout">Check out</button>
+        <button id="Button_backtoresearch">Back to Search List</button>
+        </p>    </body>
 </html>
