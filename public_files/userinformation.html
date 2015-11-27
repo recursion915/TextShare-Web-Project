@@ -34,7 +34,7 @@
                                      
                                      for(i=0; i<data.length;i++){
                                      $('#bookrecord').append('<div id="div'+ i +'" />');
-                                     $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);
+                                     $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition+" Photo: "+data[i].photo);
                                      }
                                      }else{
                                      $("#status").html("Error: could not find book record!");
@@ -75,7 +75,7 @@
                                                               $("#searchResult").html("");
                                                               $('#searchResult').append('<div id="result'+ i +'" />');
                                      
-                                                              $('#result'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);}}
+                                                              $('#result'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition)+"Photo: "+data[i].photo;}}
                                                               },
                                      
                                      
