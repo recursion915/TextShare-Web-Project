@@ -47,7 +47,7 @@ app.post('/api/photo',function(req,res){
 //get book photos
 app.get('/getImages/',function(req,res){
 //        var imageName=req.params[0];
-        console.log("ImageName :"+ImageName);
+//        console.log("ImageName :"+ImageName);
         var data;
         data=ImageName;
         
@@ -125,9 +125,9 @@ app.post('/bookcreate',function(req,res){
          if(!myUsername){
          res.send('ERROR');
          return;}
-         
-         var book={username:postBody.username,bookname:postBody.bookname,ISBN:postBody.ISBN,price:postBody.bookprice,bookcondition:postBody.bookcondition};
-         
+         console.log(ImageName);
+         var book={username:postBody.username,bookname:postBody.bookname,ISBN:postBody.ISBN,price:postBody.bookprice,bookcondition:postBody.bookcondition,photo:ImageName};
+         console.log(book)
          var query=db.query('INSERT INTO books SET ?', book, function(err,res){
                             if(err){throw err;}
                             });
