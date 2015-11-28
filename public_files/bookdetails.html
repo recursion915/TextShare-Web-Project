@@ -1,0 +1,106 @@
+<html>
+   
+   <head>
+        <title>Book Details</title>
+        <script src="jquery-1.11.3.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            
+
+            $(document).ready(function() {
+                              
+                              $("#firstname").html("Hello "+localStorage['firstname']+" "+localStorage['lastname']+"!");
+                              $("#username").html("Your username is "+localStorage['username']+".");
+                              $("#password").html("Your password is "+localStorage['password']+".");
+                              $("#locationDiv").html("You live at "+localStorage['address']+".");
+                              $("#schoolDiv").html("You study at "+localStorage['university']+".");
+                              
+                              
+                              
+                              $.ajax({
+                                     
+                                     url:"bookedit/" + localStorage['username'],
+                                     type: "GET",
+                                     datatype: "json",
+                                     
+                                     success: function(data){
+                                     console.log("You received some data!", data);
+                                     
+                                     
+                                     if(data){
+                                     console.log(data[0]);
+                                     console.log(data.length);
+                                     
+                                     for(i=0; i<data.length;i++){
+                                     $('#bookrecord').append('<div id="div'+ i +'" />');
+                                     $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);
+                                     }
+                                     }else{
+                                     $("#status").html("Error: could not find book record!");
+                                     }
+                                     },
+                                     });
+
+                              
+                              $("#Button_logout").click(function(){
+                                                        localStorage.clear();
+                                                        window.location.replace("signin.html");
+                                                        });
+                              $("#Button_bookcreate").click(function(){
+                                                            window.location.replace("bookcreate.html");
+                                                            });
+
+                              
+                              $(document).ajaxError(function() {
+                                                    alert("Sorry, there was a problem!");
+                                                    });
+                              
+                              $("#search").click(function() {
+                                                 
+                                                 
+                              $.ajax({
+                                                              // The URL for the request -- note the simple REST API!
+                                                              // all URLs are relative to http://localhost:3000/
+                                                              url: "booksearch/" + $("#bookWanted").val(),
+                                                              type: "GET",
+                                                              dataType : "json",
+                                     
+                                                              success: function( data ) {
+                                                              console.log("You received some data!", data);
+                                                              if(typeof data[0] === 'undefined'){
+                                                              $("#searchResult").html("No record of books you searched for was found");}
+                                                              else{
+                                                              for(i=0; i<data.length;i++){
+                                                              $("#searchResult").html("");
+                                                              $('#searchResult').append('<div id="result'+ i +'" />');
+                                     
+                                     $('#result'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price);}}
+                                                              },
+                                     
+                                     
+                                     });
+                                
+                                  });
+                              });
+                              
+            </script>
+    </head>
+    
+    <body>
+      
+        <h1>Book Details</h1>
+        <p><img id="image" alt="Book Preview" src="" style="width:184px;height:228px;"> </P>
+     
+        Title: <div id="booltitle"></div>
+        ISNB: <div id="isbn"></div>
+        Book Condition: <div id="bookcondition"></div>
+        Price: <div id="price"></div>
+        Sell by: <div id="seller"></div>
+        Location: <div id="location"></div>
+       
+        <p>
+        <button id="Button_checkout">Check out</button>
+        <button id="Button_backtoresearch">Back to Search List</button>
+        </p>    </body>
+</html>
