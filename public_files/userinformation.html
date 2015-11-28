@@ -78,7 +78,7 @@
                                                               $('#result'+ i).css('cursor','hand');
                                                               $('#result'+ i).click(function(event){
                                                                                     var index=(event.target.id).charAt(6);
-                                                              window.location=$(this).find("event.target.id").attr("http://localhost:3000/bookdetails.html");
+                                                              window.location.href="bookdetails.html";
                                                                                     localStorage.setItem('searchresult',JSON.stringify(data[index]));
                                                            
                                                            });
