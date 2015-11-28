@@ -67,16 +67,25 @@
                                                               dataType : "json",
                                      
                                                               success: function( data ) {
-                                                              console.log("You received some data!", data);
+                                                              //console.log("You received some data!", data);
                                                               if(typeof data[0] === 'undefined'){
                                                               $("#searchResult").html("No record of books you searched for was found");}
                                                               else{
                                                               for(i=0; i<data.length;i++){
-                                                              $("#searchResult").html("");
-                                                              $('#searchResult').append('<div id="result'+ i +'" />');
                                      
-                                                              $('#result'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);}}
-                                                              },
+                                                              $('#searchResult').append('<div id="result'+ i +'" />');
+                                                              $('#result'+ i).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);
+                                                              $('#result'+ i).css('cursor','hand');
+                                                              $('#result'+ i).click(function(event){
+                                                                                    var index=(event.target.id).charAt(6);
+                                                              window.location=$(this).find("event.target.id").attr("http://localhost:3000/bookdetails.html");
+                                                                                    localStorage.setItem('searchresult',JSON.stringify(data[index]));
+                                                           
+                                                           });
+                                     
+                                                              }
+                                     
+                                     }},
                                      
                                      
                                      });
@@ -108,6 +117,7 @@
         <p></p>
         <p></p>
         <div id="searchResult"></div>
+        
 
         
     </body>
