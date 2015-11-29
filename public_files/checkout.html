@@ -1,0 +1,125 @@
+<html>
+   
+   <head>
+        <title>Book Details</title>
+        <script src="jquery-1.11.3.min.js"></script>
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            
+            
+
+            $(document).ready(function() {
+                              
+                              var searchdata= JSON.parse(localStorage.getItem("searchresult"));
+<!--                              console.log(searchdata.photo);-->
+                              var price=0.0;
+                              
+                              $("#seller").html("Selling by:"+searchdata.username);
+                              
+                              
+                              $("#location").html();
+                              $("#USPS").click(function(){
+                                                            price=5;
+                                                            console.log("USPS");
+                                                            $("#shipping").html("Shipping method: USPS");
+                                               $("#price").html("Total Price(including shipping): USD: "+(searchdata.price+price));
+                                                        });
+                              $("#FedEx").click(function(){
+                                                price=10.6;
+                                               console.log("FedEx");
+                                               $("#shipping").html("Shipping method: FedEx");
+                                                $("#price").html("Total Price(including shipping): USD: "+(searchdata.price+price));
+                                               });
+                              $("#UPS").click(function(){
+                                              price=11.72;
+                                               console.log("UPS");
+                                               $("#shipping").html("Shipping method: UPS");
+                                              $("#price").html("Total Price(including shipping): USD: "+(searchdata.price+price));
+                                               });
+                              $("#Offline").click(function(){
+                                                  price=0;
+                                               console.log("Offline");
+                                               $("#shipping").html("Shipping method: Offline");
+                                                  $("#price").html("Total Price(including shipping): USD: "+(searchdata.price+price));
+                                               });
+                              
+                              $("#Button_submit").click(function(){
+                                        
+                                                        console.log("submit");
+                                                        });
+                              
+                              $("#Button_backprevious").click(function(){
+                                                                
+                                                                window.location.replace("bookdetails.html");
+                                                                });
+
+                              
+                         
+                              });
+           var URcenter= new google.maps.LatLng(43.1283,-77.6283);
+           var marker;
+           function initialize() {
+                                  var mapProp = {
+                                      center:URcenter,
+                                      zoom:5,
+                                      mapTypeId:google.maps.MapTypeId.ROADMAP
+                                  };
+            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+            //add a marker with personalized icon
+            var marker=new google.maps.Marker({
+                                              position:URcenter,
+                                              icon:'charmander.png',
+                                              animation:google.maps.Animation.BOUNCE
+                                              });
+                                              marker.setMap(map);
+            // Zoom to 15 when clicking on charmander
+           google.maps.event.addListener(marker,'click',function() {
+                                              map.setZoom(15);
+                                              map.setCenter(marker.getPosition());
+                                               });
+           
+           }
+        google.maps.event.addDomListener(window, 'load', initialize);
+        
+      
+                              
+            </script>
+    </head>
+    
+    <body>
+      
+        <h1>Check Out</h1>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Shipping Method
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a id="USPS" href="#">USPS</a></li>
+                <li><a id="UPS" href="#">UPS</a></li>
+                <li><a id="FedEx" href="#">FedEx</a></li>
+                <li><a id="Offline" href="#">Offline</a></li>
+            </ul>
+        </div>
+<!--        <form action="">-->
+<!--            <input type="checkbox" id="USPS" value="USPS">I want to ship by USPS<br>-->
+<!--            <input type="checkbox" id="UPS" value="UPS">I want to ship by UPSr<br>-->
+<!--            <input type="checkbox" id="FedEx" value="FedEx">I want to ship by FedEx<br>-->
+<!--            <input type="checkbox" id="Offline" value="Offline">Offline trade<br>-->
+<!--        </form>-->
+
+     
+     
+        <div id="seller"></div>
+        <div id="shipping"></div>
+        <div id="price"></div>
+        Your book Location:(Click the icon to zoom in) <div id="location"></div>
+        <div id="googleMap" style="width:500px;height:380px;"></div>
+       
+        <p>
+        <button id="Button_submit">Submit</button>
+        <button id="Button_backprevious">Cancel</button>
+        </p>    </body>
+</html>
