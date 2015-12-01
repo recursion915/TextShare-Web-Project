@@ -34,8 +34,78 @@
                                      
                                      for(i=0; i<data.length;i++){
                                      $('#bookrecord').append('<div id="div'+ i +'" />');
-                                     $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition);
+                                     $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition+" Status: "+data[i].bookstatus);
+                                     $('#div'+ i).css('cursor','hand');
+                                     $('#div'+ i).click(function(event){
+                                                           var index=(event.target.id).charAt(3);
+                                                           var r=confirm("Please confirm if you want to delete this record");
+                                                           if(r==true){
+                                                        $.ajax({
+                                                                url: "bookdelete/",
+                                                                type: "POST",
+                                                                datatype : "text",
+                                                        
+                                                                data:{
+                                                                id: data[index].id,
+                                                        
+                                                        
+                                                                },
+                                                                success: function( data ) {
+                                                                console.log("You received some data!", data);
+                                                                if (data=='OK') {
+                                                        
+                                                                //$("#status").html("Record is deleted successfully!");
+                                                               $.ajax({
+                                                                      
+                                                                      url:"bookedit/" + localStorage['username'],
+                                                                      type: "GET",
+                                                                      datatype: "json",
+                                                                      
+                                                                      success: function(data){
+                                                                      console.log("You received some data!", data);
+                                                                      
+                                                                      
+                                                                      if(data){
+                                                                      console.log(data[0]);
+                                                                      console.log(data.length);
+                                                                      if(data.length===0){
+                                                                        $('#div'+ data.length).remove();
+                                                                      }
+                                                                      
+                                                                      for(i=0; i<data.length+1;i++){
+                                                                      
+                                                                      $('#div'+ data.length).remove();
+                                                                      }
+                                                                      for(i=0; i<data.length;i++){
+                                                                      
+                                                                      $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition+" Status: "+data[i].bookstatus);
+                                                                      }
+
+
+                                                                      
+                                                                      }else{
+                                                                      $("#status").html("Error: could not find book record!");
+                                                                      }
+                                                                      },
+                                                                      });
+                                                                      
+                                                        
+
+                                                                }else{
+                                                                $("#status").html("Error: Record cannot be deleted!");
+                                                        }
+                                                        },
+                                                        });
+                                                        }
+                                                        });
+                                                        
+                                                        
+                                     
                                      }
+                                     
+                                     
+                                     
+
                                      }else{
                                      $("#status").html("Error: could not find book record!");
                                      }
@@ -100,6 +170,7 @@
         <p>
         <button id="Button_logout">Log out</button>
         <button id="Button_bookcreate">Create Book Record</button>
+
         </p>
         <h1>Account information</h1>
         <div id="firstname"></div>
@@ -108,7 +179,7 @@
         <div id="locationDiv"></div>
         <div id="schoolDiv"></div>
         <p></p>
-        <h1>Book Records</h1>
+        <h1>Book Records(You can delete book records by clicking items)</h1>
         <div id="bookrecord"></div>
         <h1>Search</h1>
         <br>Search what book you want to rent(Title, ISBN): <input name="bookwanted" type=text size="30" id="bookWanted"/>
@@ -117,6 +188,7 @@
         <p></p>
         <p></p>
         <div id="searchResult"></div>
+        
         
 
         

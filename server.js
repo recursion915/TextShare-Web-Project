@@ -127,7 +127,7 @@ app.post('/bookcreate',function(req,res){
          res.send('ERROR');
          return;}
          console.log(ImageName);
-         var book={username:postBody.username,bookname:postBody.bookname,ISBN:postBody.ISBN,price:postBody.bookprice,bookcondition:postBody.bookcondition,photo:ImageName};
+         var book={username:postBody.username,bookname:postBody.bookname,ISBN:postBody.ISBN,price:postBody.bookprice,bookcondition:postBody.bookcondition,photo:ImageName,bookstatus:'To be sold'};
          console.log(book)
          var query=db.query('INSERT INTO books SET ?', book, function(err,res){
                             if(err){throw err;}
@@ -193,8 +193,21 @@ app.post('/users2/',function(req,res){
 
    });
 
+app.post('/bookdelete/',function(req,res){
+         var postBody=req.body;
+         var id=postBody.id;
+         var query=db.query('DELETE FROM books WHERE id = ?', id, function(err,res){
+                            if(err){throw err;}
+                            
+                            });
+         res.send('OK');
+         return;
+         
+         
+         });
+
 app.post('/buyerconfirmation/',function(req,res){
-         console.log('haha');
+
          var postBody=req.body;
          var buyername=postBody.buyername;
          var ownername=postBody.ownername;
@@ -206,7 +219,14 @@ app.post('/buyerconfirmation/',function(req,res){
          console.log(buyername);
          console.log(ownername);
          console.log(bookname);
+         var status='book ordered';
+         console.log(status)
+         var query=db.query('UPDATE books SET bookstatus = ? WHERE bookname = ? AND username = ? AND price = ?', [status, bookname, ownername, price], function(err,res){
+                            if(err){throw err;}
+                            });
          
+
+
          function getQuery(username, callback){
          db.query('SELECT * FROM users WHERE username=?', buyername,function(err,results,rows){
                   if(err){
