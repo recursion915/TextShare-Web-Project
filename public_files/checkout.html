@@ -48,7 +48,31 @@
                                                });
                               
                               $("#Button_submit").click(function(){
-                                        
+                                                        $.ajax({
+                                                               
+                                                            url: "buyerconfirmation/",
+                                                            type: "POST",
+                                                            dataType : "text",
+                                                               
+                                                            data:{ buyername: localStorage['username'],
+                                                                   bookname: searchdata.bookname,
+                                                                   ISBN: searchdata.ISBN,
+                                                                   photo: searchdata.photo,
+                                                                   bookcondition: searchdata.bookcondition,
+                                                                   ownername: searchdata.username,
+                                                                   price: searchdata.price,
+                                                               
+                                                               },
+                                                            success: function( data ) {
+                                                            console.log("You received some data!", data);
+                                                            if (data=='OK') {
+
+                                                            $("#status").html("Your order is placed successfully!");
+                                                            }else{
+                                                            $("#status").html("Error: order cannot be placed!");
+                                                            }
+                                                            },
+                                                        });
                                                         console.log("submit");
                                                         });
                               
@@ -121,5 +145,7 @@
         <p>
         <button id="Button_submit">Submit</button>
         <button id="Button_backprevious">Cancel</button>
-        </p>    </body>
+        </p>
+        <div id="status"></div>
+        </body>
 </html>

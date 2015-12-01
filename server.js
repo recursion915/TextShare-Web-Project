@@ -7,6 +7,7 @@ var multer  = require('multer');
 var app=express();
 var upload = multer({ dest: './uploads/'});
 var ImageName;
+var nodemailer=require('nodemailer');
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -156,7 +157,7 @@ app.post('/users2/',function(req,res){
          var postBody=req.body;
          var nameToLookup=postBody.username;
          var passwordToCheck=postBody.password;
-          console.log(nameToLookup);
+         console.log(nameToLookup);
          console.log(passwordToCheck);
 
 //         function getQuery(nameToLookup,callback){
@@ -191,6 +192,78 @@ app.post('/users2/',function(req,res){
             });
 
    });
+
+app.post('/buyerconfirmation/',function(req,res){
+         console.log('haha');
+         var postBody=req.body;
+         var buyername=postBody.buyername;
+         var ownername=postBody.ownername;
+         var bookname=postBody.bookname;
+         var bookcondition=postBody.bookcondition;
+         var price=postBody.price;
+         var ISBN=postBody.ISBN;
+         var photo=postBody.photo;
+         console.log(buyername);
+         console.log(ownername);
+         console.log(bookname);
+         
+         function getQuery(username, callback){
+         db.query('SELECT * FROM users WHERE username=?', buyername,function(err,results,rows){
+                  if(err){
+                  callback(err,null);}
+                  else{
+                  callback(null,results[0]);}
+                  });
+         }
+
+         getQuery(buyername,function(err,data){
+                  if(err){throw err;}
+                  else{
+                  
+                          console.log(data.username);
+                          var html = '';
+                          html+="<h>Hello,<br />";
+                          html+="<h><br />";
+                          html+="<h>Buyer Info:<br />";
+                          var buyer = ['username: '+data.username,'firstname: ' +data.firstname, 'lastname: '+data.lastname, 'address: '+data.address, 'university: '+data.university];
+                          for(var i=0; i<buyer.length;i++){
+                              html+="<b>"+buyer[i]+"<br />";
+                          }
+                          html+="<h>Requested Book Info:<br />";
+                          var bookrequested = ['bookname: '+bookname,'bookcondition: '+bookcondition,'price: '+price,'ISBN: '+ISBN];
+                          for(var i=0; i<bookrequested.length;i++){
+                              html+="<b>"+bookrequested[i]+"<br />";
+                          }
+                          //create reusable transporter object using SMTP transport
+                          var transporter = nodemailer.createTransport({
+                                                                        service: 'Gmail',
+                                                                        auth: {
+                                                                        user: 'booksharewebservice@gmail.com',
+                                                                        pass: 'recursion915'
+                                                                        }
+                                                                        });
+                          //send email with transporter
+                           var mail={
+                           to: ownername,
+                           subject: 'Book Rental Request',
+                           html: html
+                           };
+                  
+                           transporter.sendMail(mail, function(err, info){
+                                                if (err) {
+                                                console.log(err);
+                                                
+                                                }
+                                                res.send('OK');
+                                                return;
+                                                console.log('Message sent: ' + info.response);
+                                                });
+                  }
+                  }
+                           
+                  );
+         });
+
 
 var server = app.listen(3000, function () {
     var port = server.address().port;
