@@ -10,16 +10,17 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script type="text/javascript">
             
-            
+        
 
             $(document).ready(function() {
                               
-                              var searchdata= JSON.parse(localStorage.getItem("searchresult"));
-<!--                              console.log(searchdata.photo);-->
+                              
+                            
                               var price=0.0;
                               
                               $("#seller").html("Selling by:"+searchdata.username);
-                              console.log("book location is"+searchdata.location);
+                              console.log("book location is"+searchdata.address);
+                             
                               
                               
                               $("#location").html();
@@ -86,30 +87,45 @@
                               
                          
                               });
-           var URcenter= new google.maps.LatLng(43.1283,-77.6283);
-           var marker;
-           function initialize() {
+                              var LatLng;
+                              
+                              var searchdata= JSON.parse(localStorage.getItem("searchresult"));
+                              var school=searchdata.university;
+                              //convert address to GPS location
+                              //key is registered under: chenz915@gmail.com
+                              //please make you own key
+                              //if you want to use this code
+                              
+                              $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+school+'&key=AIzaSyCjG2BrkEyoQLWwpNVRIOgP0bL5uFN54TA', null, function (data) {
+                                        var p = data.results[0].geometry.location
+                                        LatLng=new google.maps.LatLng(p.lat, p.lng);
+                                        console.log("your school is"+school+"its gps"+LatLng);
+                                        });
+<!--                            var URcenter= new google.maps.LatLng(42.938004, -77.37837890000003);-->
+<!--                            console.log("URcenter is"+URcenter);-->
+                            var marker;
+                            function initialize() {
                                   var mapProp = {
-                                      center:URcenter,
+                                      center:LatLng,
                                       zoom:5,
                                       mapTypeId:google.maps.MapTypeId.ROADMAP
                                   };
-            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-            //add a marker with personalized icon
-            var marker=new google.maps.Marker({
-                                              position:URcenter,
+                                  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+                                  //add a marker with personalized icon
+                        var marker=new google.maps.Marker({
+                                              position:LatLng,
                                               icon:'charmander.png',
                                               animation:google.maps.Animation.BOUNCE
                                               });
                                               marker.setMap(map);
-            // Zoom to 15 when clicking on charmander
-           google.maps.event.addListener(marker,'click',function() {
+                                              // Zoom to 15 when clicking on charmander
+                    google.maps.event.addListener(marker,'click',function() {
                                               map.setZoom(15);
                                               map.setCenter(marker.getPosition());
                                                });
            
-           }
-        google.maps.event.addDomListener(window, 'load', initialize);
+                            }
+                        google.maps.event.addDomListener(window, 'load', initialize);
         
       
                               

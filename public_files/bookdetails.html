@@ -12,6 +12,7 @@
                               
                               var searchdata= JSON.parse(localStorage.getItem("searchresult"));
                               console.log(searchdata.photo);
+                              console.log(searchdata.location);
                               
                               $("#booktitle").html(searchdata.bookname);
                               $("#image").attr('src',searchdata.photo);
