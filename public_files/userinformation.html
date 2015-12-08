@@ -4,8 +4,9 @@
       <script src="jquery-1.11.3.min.js"></script>
          <script type="text/javascript">
 
+            //Reference: http://codular.com/node-web-sockets
+            var ws = new WebSocket('ws://localhost:3000', 'echo-protocol');
 
-            
             $(document).ready(function() {
                               
               $("#firstname").html("Hello "+localStorage['firstname']+" "+localStorage['lastname']+"!");
@@ -15,34 +16,27 @@
               $("#schoolDiv").html("You study at "+localStorage['university']+".");
 
 
+              poll();
+              
+              ws.addEventListener("message", function(e){
 
-                              
-              (function poll(){
-               setTimeout(function(){
-                 $.ajax({
-                                url:"bookedit/" + localStorage['username'],
-                                type: "GET",
-                                datatype: "json",
-                                complete: poll,
-                                success: function(data){
-                                  if(data){
-                                     for(i=0; i<data.length;i++){
-                                        $('#bookrecord').append('<div id="div'+ i +'" onclick="bookdelete()" class="bookrecord"/>');
-                                        $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition+" Status: "+data[i].bookstatus);
-                                        $('#div'+ i ).css('cursor','hand'); 
-                                        localStorage.setItem('bookedit',JSON.stringify(data));
+              var msg = e.data;
 
-                                        }
-                                      }
-                                    
-                                    else{
-                                      console.log("No book record can be found");
-                                    }
-                                  },
+              if(msg == "recordcreated"){
 
-                                });
-                        }, 10);
-                    })();
+                  poll();
+              }
+              else if(msg == "recorddeleted"){
+                  $(".bookrecord").remove();
+                  poll();
+              }
+
+              });
+
+
+
+                           
+
 
 
   
@@ -56,9 +50,29 @@
                   localStorage.clear();
                   window.location.replace("signin.html");
                 });
-              $("#Button_bookcreate").click(function(){
-                  window.location.replace("bookcreate.html");
-                });
+
+              $("#previewButton").click(function(){
+                                                      
+                                                      console.log("previewButton clicked");
+                                                      
+                                                      $.ajax({
+                                                             
+                                                             url:"getImages/",
+                                                             type: "GET",
+                                                             datatype: "text",
+                                                             
+                                                             success: function(data){
+                                                             console.log("You graph path is!", data);
+                                                             $("#image").attr('src',data);
+                                                             },
+                                                             
+                                                             });
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      });
+
          
 
               
@@ -70,6 +84,30 @@
 
 
               });
+
+
+
+                        function div_show(){
+                                          document.getElementById('myModal').style.display="block";
+                        }
+
+                        function div_hide(){
+                                          document.getElementById('myModal').style.display="none";
+                        }
+
+
+                        function sendCreateMessage() {
+                          var message = "recordcreated";
+                          ws.send(message);
+
+                        }
+
+                        function sendDeleteMessage() {
+                          var message = "recorddeleted";
+                          ws.send(message);
+
+                        }
+ 
 
 
                         function bookdelete() {
@@ -91,7 +129,8 @@
                                               console.log("You received some data!", data);
                                                 if (data=='OK') {
                                                   $("#status").html("Record is deleted successfully!");
-                                                  $(".bookrecord").remove();
+                                                  // $(".bookrecord").remove();
+                                                  sendDeleteMessage();
                                                   search();
                                                
 
@@ -106,6 +145,31 @@
                                          
                                           }
                                         }
+
+                       function poll() {
+                                    
+                                       $.ajax({
+                                                url:"bookedit/" + localStorage['username'],
+                                                type: "GET",
+                                                datatype: "json",
+                                                success: function(data){
+                                                if(data){
+                                                  for(i=0; i<data.length;i++){
+                                                    $('#bookrecord').append('<div id="div'+ i +'" onclick="bookdelete()" class="bookrecord"/>');
+                                                    $('#div'+ i ).html("Book Title: "+data[i].bookname+" ISBN: "+data[i].ISBN+" Price: "+"$"+data[i].price+" Condition: "+data[i].bookcondition+" Status: "+data[i].bookstatus);
+                                                    $('#div'+ i ).css('cursor','hand'); 
+                                                    localStorage.setItem('bookedit',JSON.stringify(data));
+
+                                                  }
+                                                }
+                                    
+                                              else{
+                                                    console.log("No book record can be found");
+                                                  }
+                                              },
+
+                                            });
+                                         }
 
                 function search() {                  
                                                                                    
@@ -139,6 +203,39 @@
                  }
 
 
+                function create_record() {
+
+                       $.ajax({
+                        
+                         url:"bookcreate/",
+                         type: "POST",
+                         dataType : "text",
+                              
+                         data : { username: localStorage['username'],
+                                  bookname: $("#booknameBox").val(),
+                                  bookcondition: $("#bookconditionBox").val(),
+                                  bookprice: $("#bookpriceBox").val(),
+                                  ISBN: $("#ISBNBox").val(),
+                          },
+                                            
+                         success: function( data ) {
+                            console.log("You received some data!", data);
+                            if (data=='OK') {
+                                sendCreateMessage();
+                                var form = document.getElementById("form_bookcreate");
+                                form.reset();
+                                console.log("Successfully created a book record!");                              
+                            }else{
+                                console.log("Error: could not create a book record!");
+                            }
+                            
+                        },
+                              
+                       });
+
+                }
+
+
             
                                         
 
@@ -157,10 +254,55 @@
     <body>
         <p>
         <button id="Button_logout">Log out</button>
-        <button id="Button_bookcreate">Create Book Record</button>
-
-
+        <button class="btn btn-primary btn-lg" onclick="div_show()" data-toggle="modal" data-target="#myModal">Create Book Records
+        </button>
         </p>
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Book Create</h4>
+              </div>
+                <div class="modal-body">
+  
+                            <form id = "form_bookcreate">
+                            Book Name:<br>
+                              <input id="booknameBox" type="text" name="bookname">
+                              <br>
+                            Book Condition(Like New, Good, Acceptable):<br>
+                              <input id="bookconditionBox" type="text" name="bookcondition">
+                              <br>
+                            Book Price(USD):<br>
+                              <input id="bookpriceBox" type="text" name="bookprice">
+                              <br>
+                            ISBN:<br>
+                              <input id="ISBNBox" type="text" name="ISBN">
+                              <br>
+                            </form>
+                            UPLOAD your textbook photos:
+                              <form id        =  "uploadForm"
+                                    enctype   =  "multipart/form-data"
+                                    action    =  "/api/photo"
+                                    method    =  "post"
+                                >
+                                <input type="file" name="userPhoto" id="uploadFile" />
+                                <input type="submit" value="Upload Image" name="submit" id="uploadImage">
+                                        
+                              </form>
+                              <img id="image" alt="Book Preview" src="" style="width:184px;height:228px;">
+
+                              <input type="submit" value="Preview" id="previewButton" />
+                          
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="div_hide()">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="create_record()">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
         <h1>Account information</h1>
         <div id="firstname"></div>
         <div id="username"></div>

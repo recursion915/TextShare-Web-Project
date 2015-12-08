@@ -8,6 +8,10 @@ var app=express();
 var upload = multer({ dest: './uploads/'});
 var ImageName;
 var nodemailer=require('nodemailer');
+var WebSocketServer = require('websocket').server;
+
+
+
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -285,7 +289,44 @@ app.post('/buyerconfirmation/',function(req,res){
          });
 
 
+// Websocket Reference: http://codular.com/node-web-sockets
 var server = app.listen(3000, function () {
     var port = server.address().port;
     console.log('Server started at http://localhost:%s/', port);
 });
+
+var wsServer = new WebSocketServer({httpServer: server});
+
+
+
+
+var count = 0;
+var clients = {};
+
+wsServer.on('request', function(r){
+ 
+  var connection = r.accept('echo-protocol', r.origin);
+  var id = count++;
+  clients[id] = connection;
+  console.log((new Date()) + ' Connection accepted [' + id + ']');
+
+  connection.on('message', function(message) {
+
+    var msgString = message.utf8Data;
+
+    for(var i in clients){
+
+        clients[i].sendUTF(msgString);
+
+    }
+
+  });
+
+});
+
+
+
+
+
+
+
