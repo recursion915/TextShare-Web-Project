@@ -140,16 +140,17 @@ app.post('/bookcreate',function(req,res){
          return;});
 //get book search results
 app.get('/booksearch/*',function(req,res){
-        var itemToLookup=req.params[0];
+        var itemToLookup="%"+req.params[0]+"%";
+        console.log(itemToLookup);
         if(isNaN(parseInt(itemToLookup))){
             //title
-        var query=db.query('SELECT * FROM books INNER JOIN users ON books.username=users.username WHERE bookname=?', itemToLookup,function(err,rows){
+        var query=db.query('SELECT * FROM books INNER JOIN users ON books.username=users.username WHERE bookname LIKE ?', itemToLookup,function(err,rows){
                            if(err)throw err;
                            res.send(rows);
                            return;});
         }else{
             //ISBN
-        var query=db.query('SELECT * FROM books INNER JOIN users ON books.username=users.username WHERE ISBN=?', itemToLookup,function(err,rows){
+        var query=db.query('SELECT * FROM books INNER JOIN users ON books.username=users.username WHERE ISBN LIKE ?', itemToLookup,function(err,rows){
                             if(err)throw err;
                             res.send(rows);
                             return;});
